@@ -1,41 +1,34 @@
 const form = document.querySelector('form');
-const input = document.querySelector('input');
 
-const result = document.getElementById('result');
+// Storage part
+function storeList() {
+  localStorage.todoList = list.innerHTML;
+}
 
-let id =0;
-if (window.localStorage.getItem('id')) {
-  id = window.localStorage.getItem('id')
-  for (i=1; i <= id; i++) {
-    var value = localStorage.getItem(i);
-    document.getElementById("result").insertAdjacentHTML("beforeend", 
-    `<div>
-      <span id='${i}'> ${value} </span>
-    </div>`);
-    console.log(value);
-    }
+function getTodos(){
+  if (localStorage.todoList){
+    list.innerHTML =localStorage.todoList;
+  } else {
+    list.innerHTML = `<li>Cliquez sur un todo pour le supprimer</li>`;
   }
+}
+window.addEventListener('load', getTodos);
 
-form.addEventListener('submit', (e) => {
-  id++;
-  window.localStorage.id = id;
+// Add element
+form.addEventListener('submit', (e)=> {
   e.preventDefault();
-  task = input.value;
-  input.value = null;
-  document.getElementById("result").insertAdjacentHTML("beforeend", 
-  `<div>
-    <span id='${id}'> ${task} </span>
-  </div>`);
-  window.localStorage.setItem(id , task)
+  
+  list.innerHTML += `<li>${item.value}</li>`
+  item.value = '';
+  storeList()
 });
 
-document.addEventListener('click' ,(e)=> {
-  if (e.target.id) {
-    let ide = e.target.id
-    ide = document.getElementById(e.target.id);
-    console.log(ide);
-    
+// Remove element
+list.addEventListener('click', (e)=> {
+  if (e.target.classList.contains('checked')){
+    e.target.remove();
+  } else {
+    e.target.classList.add('checked');
   }
+  storeList()
 })
-
-
